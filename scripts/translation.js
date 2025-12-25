@@ -20,11 +20,7 @@ class TranslationService {
 
         const target = targetLang || this.currentTargetLang;
 
-        // If source language is auto, detect it first
-        if (sourceLang === 'auto') {
-            sourceLang = languageDetector.detect(text);
-        }
-
+        // No auto detection - use provided source language directly
         // If source and target languages are the same
         if (sourceLang === target) {
             return text;
@@ -177,7 +173,22 @@ class TranslationService {
      */
     async fallbackTranslation(text, sourceLang, targetLang) {
         try {
-            // Use free Google Translate API (no API Key required)
+            // Use MyMemory Translation API as primary method (free and reliable)
+            const myMemoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`;
+            
+            const myMemoryResponse = await fetch(myMemoryUrl);
+            
+            if (myMemoryResponse.ok) {
+                const myMemoryData = await myMemoryResponse.json();
+                if (myMemoryData && myMemoryData.responseData && myMemoryData.responseData.translatedText) {
+                    const translated = myMemoryData.responseData.translatedText;
+                    if (translated && translated.trim() !== text.trim() && translated !== 'MYMEMORY WARNING') {
+                        return translated;
+                    }
+                }
+            }
+            
+            // Fallback to Google Translate API
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
             
             const response = await fetch(url);
@@ -189,15 +200,24 @@ class TranslationService {
             const data = await response.json();
             
             // Extract translated text from response
-            if (data && data[0] && data[0][0] && data[0][0][0]) {
-                return data[0].map(item => item[0]).join('');
+            // Response format: [[["translated text", "original text", null, null, 0]], null, "en"]
+            if (data && Array.isArray(data) && data[0] && Array.isArray(data[0])) {
+                let translated = '';
+                for (let i = 0; i < data[0].length; i++) {
+                    if (data[0][i] && Array.isArray(data[0][i]) && data[0][i][0]) {
+                        translated += data[0][i][0];
+                    }
+                }
+                if (translated && translated.trim() !== text.trim()) {
+                    return translated;
+                }
             }
             
-            throw new Error('Invalid response format');
+            throw new Error('Invalid response format or translation failed');
         } catch (error) {
             console.error('Fallback translation error:', error);
-            // On error, return original text
-            return text;
+            // On error, throw to show error message instead of returning original text
+            throw new Error('Translation service unavailable. Please check your internet connection.');
         }
     }
 

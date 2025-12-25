@@ -200,30 +200,57 @@ class UIManager {
         selector.style.left = left + 'px';
         
         // Create language list
-        Object.entries(CONFIG.languages).forEach(([code, lang]) => {
-            // For source language, show 'auto' too
-            // For target language, don't show 'auto'
-            if (type === 'source' || code !== 'auto') {
-                const option = document.createElement('div');
-                option.className = 'language-option';
-                if (code === currentLang) {
-                    option.classList.add('selected');
+        if (type === 'target') {
+            // For target language, only show English and Persian
+            const allowedTargetLangs = ['en', 'fa'];
+            allowedTargetLangs.forEach(code => {
+                const lang = CONFIG.languages[code];
+                if (lang) {
+                    const option = document.createElement('div');
+                    option.className = 'language-option';
+                    if (code === currentLang) {
+                        option.classList.add('selected');
+                    }
+                    
+                    option.innerHTML = `
+                        <span class="language-option-flag">${lang.flag}</span>
+                        <span class="language-option-name">${lang.name}</span>
+                    `;
+                    
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.selectLanguage(type, code);
+                        this.hideLanguageSelector();
+                    });
+                    
+                    selector.appendChild(option);
                 }
-                
-                option.innerHTML = `
-                    <span class="language-option-flag">${lang.flag}</span>
-                    <span class="language-option-name">${lang.name}</span>
-                `;
-                
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.selectLanguage(type, code);
-                    this.hideLanguageSelector();
-                });
-                
-                selector.appendChild(option);
-            }
-        });
+            });
+        } else {
+            // For source language, show all languages except 'auto'
+            Object.entries(CONFIG.languages).forEach(([code, lang]) => {
+                if (code !== 'auto') {
+                    const option = document.createElement('div');
+                    option.className = 'language-option';
+                    if (code === currentLang) {
+                        option.classList.add('selected');
+                    }
+                    
+                    option.innerHTML = `
+                        <span class="language-option-flag">${lang.flag}</span>
+                        <span class="language-option-name">${lang.name}</span>
+                    `;
+                    
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.selectLanguage(type, code);
+                        this.hideLanguageSelector();
+                    });
+                    
+                    selector.appendChild(option);
+                }
+            });
+        }
         
         selector.classList.add('show');
     }

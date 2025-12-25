@@ -52,10 +52,7 @@ class TranslationApp {
             this.handleSwapLanguages();
         });
 
-        // Auto detect language on text change
-        uiManager.elements.sourceText.addEventListener('input', () => {
-            this.handleAutoDetect();
-        });
+        // Auto detect disabled - user must select source language manually
     }
 
     /**
@@ -72,19 +69,13 @@ class TranslationApp {
         uiManager.showLoading();
 
         try {
-            // If source language is auto, detect it first
-            let detectedLang = this.currentSourceLang;
-            if (detectedLang === 'auto') {
-                detectedLang = languageDetector.detect(sourceText);
-                this.currentSourceLang = detectedLang;
-                translationService.setSourceLanguage(detectedLang);
-                uiManager.updateSourceLanguage(detectedLang);
-            }
+            // Use selected source language (no auto detection)
+            const sourceLang = this.currentSourceLang;
 
             // Translate
             const translatedText = await translationService.translate(
                 sourceText,
-                detectedLang,
+                sourceLang,
                 this.currentTargetLang
             );
 
@@ -94,7 +85,7 @@ class TranslationApp {
 
             // Save to history (if enabled)
             if (CONFIG.saveHistory) {
-                this.saveToHistory(sourceText, translatedText, detectedLang, this.currentTargetLang);
+                this.saveToHistory(sourceText, translatedText, sourceLang, this.currentTargetLang);
             }
         } catch (error) {
             console.error('Translation error:', error);
@@ -109,24 +100,8 @@ class TranslationApp {
      * Auto detect language
      */
     handleAutoDetect() {
-        const sourceText = uiManager.getSourceText();
-        
-        if (!sourceText || sourceText.trim().length === 0) {
-            // If text is empty and source language is not auto, return to auto
-            if (this.currentSourceLang !== 'auto') {
-                // Only if user hasn't manually changed the language
-                // You can add your own logic here
-            }
-            return;
-        }
-
-        // If source language is auto, detect the language
-        if (this.currentSourceLang === 'auto') {
-            const detectedLang = languageDetector.detect(sourceText);
-            this.currentSourceLang = detectedLang; // Update source language
-            translationService.setSourceLanguage(detectedLang);
-            uiManager.updateSourceLanguage(detectedLang); // Display in source box (not target box)
-        }
+        // Auto detection disabled - user must manually select source language
+        return;
     }
 
     /**

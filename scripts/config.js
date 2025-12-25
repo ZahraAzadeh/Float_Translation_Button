@@ -25,8 +25,8 @@ const CONFIG = {
     },
 
     // Default source and target languages
-    defaultSource: 'auto',
-    defaultTarget: 'en',
+    defaultSource: 'fa', // Persian as default source
+    defaultTarget: 'en', // English as default target
 
     // Translation API options
     // Option 1: Use LibreTranslate (Free and Open Source)
