@@ -1,136 +1,139 @@
-# اپلیکیشن ترجمه شناور (Floating Translation Overlay)
+# Floating Translation Overlay
 
-یک اپلیکیشن ترجمه شناور و زیبا که به صورت Overlay روی صفحات وب و شبکه‌های اجتماعی کار می‌کند.
+A beautiful floating translation application that works as an overlay on web pages and social media.
 
-## ✨ ویژگی‌ها
+## ✨ Features
 
-- 🎯 **دکمه شناور**: همیشه در دسترس و قابل استفاده
-- 🌐 **تشخیص خودکار زبان**: تشخیص خودکار زبان متن ورودی
-- 🔄 **ترجمه سریع**: ترجمه متن به زبان‌های مختلف
-- 🎨 **طراحی مدرن**: رابط کاربری زیبا و کاربرپسند
-- 📱 **Responsive**: سازگار با تمام اندازه‌های صفحه
-- 🌙 **تم تاریک**: طراحی مناسب برای استفاده در شب
-- 📋 **کپی سریع**: کپی کردن متن ترجمه شده با یک کلیک
-- 🔀 **جابجایی زبان**: جابجایی سریع زبان منبع و هدف
+- 🎯 **Floating Button**: Always accessible and ready to use
+- 🌐 **Auto Language Detection**: Automatic detection of input text language
+- 🔄 **Fast Translation**: Translate text to multiple languages
+- 🎨 **Modern Design**: Beautiful and user-friendly interface
+- 📱 **Responsive**: Compatible with all screen sizes
+- 🌙 **Dark Theme**: Perfect for night use
+- 📋 **Quick Copy**: Copy translated text with one click
+- 🔀 **Language Swap**: Quickly swap source and target languages
 
-## 🚀 نحوه استفاده
+## 🚀 How to Use
 
-### روش 1: استفاده مستقیم (Local)
+### Method 1: Direct Use (Local)
 
-1. تمام فایل‌ها را دانلود کنید
-2. فایل `index.html` را در مرورگر باز کنید
-3. از دکمه شناور برای باز کردن پنل ترجمه استفاده کنید
+1. Download all files
+2. Open `index.html` in your browser
+3. Use the floating button to open the translation panel
 
-### روش 2: نصب روی موبایل (PWA) 📱
+### Method 2: Install on Mobile (PWA) 📱
 
-**برای نصب روی موبایل، به فایل `MOBILE_INSTALL_GUIDE.md` مراجعه کنید.**
+**For mobile installation, refer to `MOBILE_INSTALL_GUIDE.md`.**
 
-خلاصه:
-1. فایل‌ها را روی یک سرور HTTPS آپلود کنید
-2. در مرورگر موبایل باز کنید
-3. گزینه "Add to Home Screen" را انتخاب کنید
+Summary:
+1. Upload files to an HTTPS server
+2. Open in mobile browser
+3. Select "Add to Home Screen" option
 
-### روش 3: ساخت APK/IPA 📦
+### Method 3: Build APK/IPA 📦
 
-**برای ساخت فایل APK (Android) یا IPA (iOS)، به فایل‌های زیر مراجعه کنید:**
+**To build APK (Android) or IPA (iOS) files, refer to:**
 
-- **`BUILD_QUICK_START.md`** - راهنمای سریع (5 دقیقه)
-- **`BUILD_APK_IPA_GUIDE.md`** - راهنمای کامل با جزئیات
+- **`BUILD_QUICK_START.md`** - Quick guide (5 minutes)
+- **`BUILD_APK_IPA_GUIDE.md`** - Complete guide with details
 
-**روش سریع:**
-1. برنامه را روی سرور آپلود کنید
-2. به [PWABuilder.com](https://www.pwabuilder.com/) بروید
-3. URL را وارد کنید و APK/IPA بسازید
+**Quick method:**
+1. Upload the app to a server
+2. Go to [PWABuilder.com](https://www.pwabuilder.com/)
+3. Enter URL and build APK/IPA
 
-### روش 4: استفاده به عنوان Extension
+### Method 4: Use as Extension
 
-می‌توانید این کد را به یک Browser Extension تبدیل کنید تا روی تمام صفحات وب کار کند.
+You can convert this code to a Browser Extension to work on all web pages.
 
-## 📋 نیازمندی‌ها
+## 📋 Requirements
 
-- یک مرورگر مدرن (Chrome, Firefox, Edge, Safari)
-- اتصال به اینترنت (برای استفاده از API ترجمه)
+- A modern browser (Chrome, Firefox, Edge, Safari)
+- Internet connection (for using translation API)
 
-## ⚙️ تنظیمات
+## ⚙️ Configuration
 
-### تنظیم API ترجمه
+### Translation API Settings
 
-در فایل `scripts/config.js` می‌توانید API ترجمه مورد نظر خود را انتخاب کنید:
+In `scripts/config.js` you can choose your preferred translation API:
 
-#### گزینه 1: LibreTranslate (پیش‌فرض - رایگان)
+#### Option 1: LibreTranslate (Default - Free)
+
 ```javascript
 useLibreTranslate: true,
 libreTranslateUrl: 'https://libretranslate.com/translate'
 ```
 
-#### گزینه 2: Google Translate API
+#### Option 2: Google Translate API
+
 ```javascript
 useGoogleTranslate: true,
 googleTranslateApiKey: 'YOUR_API_KEY_HERE'
 ```
 
-#### گزینه 3: Microsoft Translator
+#### Option 3: Microsoft Translator
+
 ```javascript
 useMicrosoftTranslate: true,
 microsoftTranslateKey: 'YOUR_API_KEY_HERE',
 microsoftTranslateRegion: 'global'
 ```
 
-### زبان‌های پشتیبانی شده
+### Supported Languages
 
-- انگلیسی (en)
-- فارسی (fa)
-- عربی (ar)
-- فرانسوی (fr)
-- آلمانی (de)
-- اسپانیایی (es)
-- ایتالیایی (it)
-- روسی (ru)
-- چینی (zh)
-- ژاپنی (ja)
-- کره‌ای (ko)
-- ترکی (tr)
-- هندی (hi)
-- پرتغالی (pt)
-- و زبان‌های دیگر...
+- English (en)
+- Persian (fa)
+- Arabic (ar)
+- French (fr)
+- German (de)
+- Spanish (es)
+- Italian (it)
+- Russian (ru)
+- Chinese (zh)
+- Japanese (ja)
+- Korean (ko)
+- Turkish (tr)
+- Hindi (hi)
+- Portuguese (pt)
+- And more...
 
-## 🎯 نحوه کار
+## 🎯 How It Works
 
-1. روی دکمه شناور کلیک کنید
-2. متن خود را در کادر ورودی Paste کنید یا تایپ کنید
-3. زبان به صورت خودکار تشخیص داده می‌شود
-4. روی دکمه "ترجمه" کلیک کنید
-5. متن ترجمه شده در کادر خروجی نمایش داده می‌شود
-6. می‌توانید متن ترجمه شده را کپی کنید
+1. Click on the floating button
+2. Paste or type your text in the input box
+3. Language is automatically detected
+4. Click the translate icon button
+5. Translated text appears in the output box
+6. You can copy the translated text
 
-## ⌨️ میانبرهای صفحه کلید
+## ⌨️ Keyboard Shortcuts
 
-- `Ctrl + Enter`: ترجمه سریع
-- `Escape`: بستن پنل (به زودی اضافه می‌شود)
+- `Enter`: Translate
+- `Ctrl + Enter`: Translate (alternative)
 
-## 🛠️ ساختار پروژه
+## 🛠️ Project Structure
 
 ```
 floating-translation-overlay/
-├── index.html                    # صفحه اصلی
+├── index.html                    # Main page
 ├── styles/
-│   ├── main.css                 # استایل‌های اصلی
-│   └── themes.css               # تم‌های تاریک/روشن
+│   ├── main.css                 # Main styles
+│   └── themes.css               # Dark/light themes
 ├── scripts/
-│   ├── config.js                # تنظیمات و پیکربندی
-│   ├── language-detection.js    # تشخیص خودکار زبان
-│   ├── translation.js           # مدیریت ترجمه
-│   ├── ui.js                    # مدیریت رابط کاربری
-│   └── app.js                   # منطق اصلی برنامه
-├── REQUIREMENTS_ANALYSIS.md     # تحلیل نیازمندی‌ها
-└── README.md                     # این فایل
+│   ├── config.js                # Configuration
+│   ├── language-detection.js   # Auto language detection
+│   ├── translation.js          # Translation management
+│   ├── ui.js                   # User interface management
+│   └── app.js                  # Main application logic
+├── REQUIREMENTS_ANALYSIS.md    # Requirements analysis
+└── README.md                    # This file
 ```
 
-## 🔧 توسعه و سفارشی‌سازی
+## 🔧 Development and Customization
 
-### تغییر رنگ‌ها
+### Change Colors
 
-در فایل `styles/main.css` می‌توانید رنگ‌ها را تغییر دهید:
+In `styles/main.css` you can change colors:
 
 ```css
 .input-box {
@@ -138,36 +141,36 @@ floating-translation-overlay/
 }
 ```
 
-### افزودن زبان جدید
+### Add New Language
 
-در فایل `scripts/config.js` در بخش `languages` زبان جدید اضافه کنید:
+In `scripts/config.js` in the `languages` section add new language:
 
 ```javascript
-'new_lang': { name: 'نام زبان', flag: '🏳️', code: 'new_lang' }
+'new_lang': { name: 'Language Name', flag: '🏳️', code: 'new_lang' }
 ```
 
-## 📝 مجوز
+## 📝 License
 
-این پروژه به صورت رایگان و Open Source است.
+This project is free and Open Source.
 
-## 🤝 مشارکت
+## 🤝 Contributing
 
-برای بهبود این پروژه، می‌توانید:
-- باگ‌ها را گزارش دهید
-- ویژگی‌های جدید پیشنهاد دهید
-- کد بهبود دهید
+To improve this project, you can:
 
-## ⚠️ نکات مهم
+- Report bugs
+- Suggest new features
+- Improve code
 
-1. برای استفاده از Google Translate API یا Microsoft Translator API، نیاز به API Key دارید
-2. LibreTranslate رایگان است اما ممکن است محدودیت‌هایی داشته باشد
-3. برای استفاده در Production، بهتر است از API Key خود استفاده کنید
+## ⚠️ Important Notes
 
-## 📞 پشتیبانی
+1. To use Google Translate API or Microsoft Translator API, you need an API Key
+2. LibreTranslate is free but may have limitations
+3. For production use, it's better to use your own API Key
 
-در صورت بروز مشکل یا سوال، می‌توانید Issue ایجاد کنید.
+## 📞 Support
+
+If you encounter any issues or questions, you can create an Issue.
 
 ---
 
-**ساخته شده با ❤️ برای ترجمه آسان و سریع**
-
+**Made with ❤️ for easy and fast translation**

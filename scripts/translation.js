@@ -1,4 +1,4 @@
-// مدیریت ترجمه متن
+// Text translation management
 
 class TranslationService {
     constructor() {
@@ -7,11 +7,11 @@ class TranslationService {
     }
 
     /**
-     * ترجمه متن
-     * @param {string} text - متن برای ترجمه
-     * @param {string} sourceLang - زبان منبع
-     * @param {string} targetLang - زبان هدف
-     * @returns {Promise<string>} - متن ترجمه شده
+     * Translate text
+     * @param {string} text - Text to translate
+     * @param {string} sourceLang - Source language
+     * @param {string} targetLang - Target language
+     * @returns {Promise<string>} - Translated text
      */
     async translate(text, sourceLang = 'auto', targetLang = null) {
         if (!text || text.trim().length === 0) {
@@ -20,12 +20,12 @@ class TranslationService {
 
         const target = targetLang || this.currentTargetLang;
 
-        // اگر زبان منبع auto است، ابتدا زبان را تشخیص می‌دهیم
+        // If source language is auto, detect it first
         if (sourceLang === 'auto') {
             sourceLang = languageDetector.detect(text);
         }
 
-        // اگر زبان منبع و هدف یکسان باشند
+        // If source and target languages are the same
         if (sourceLang === target) {
             return text;
         }
@@ -40,23 +40,23 @@ class TranslationService {
             } else if (CONFIG.useMicrosoftTranslate) {
                 translatedText = await this.translateWithMicrosoft(text, sourceLang, target);
             } else {
-                // استفاده از Google Translate رایگان به صورت پیش‌فرض
+                // Use free Google Translate as default
                 translatedText = await this.fallbackTranslation(text, sourceLang, target);
             }
 
             return translatedText;
         } catch (error) {
-            console.error('خطا در ترجمه:', error);
-            throw new Error('خطا در ترجمه متن. لطفاً دوباره تلاش کنید.');
+            console.error('Translation error:', error);
+            throw new Error('Error translating text. Please try again.');
         }
     }
 
     /**
-     * ترجمه با استفاده از LibreTranslate
+     * Translate using LibreTranslate
      */
     async translateWithLibreTranslate(text, sourceLang, targetLang) {
         try {
-            // اگر sourceLang 'auto' است، باید از 'auto' استفاده کنیم
+            // If sourceLang is 'auto', we should use 'auto'
             const source = sourceLang === 'auto' ? 'auto' : sourceLang;
             
             const response = await fetch(CONFIG.libreTranslateUrl, {
@@ -73,9 +73,9 @@ class TranslationService {
             });
 
             if (!response.ok) {
-                // اگر خطای CORS یا دیگر خطاها رخ داد
+                // If CORS error or other errors occur
                 if (response.status === 0 || response.status >= 500) {
-                    throw new Error('خطا در اتصال به سرور ترجمه. لطفاً از API Key استفاده کنید.');
+                    throw new Error('Error connecting to translation server. Please use an API Key.');
                 }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -88,25 +88,25 @@ class TranslationService {
             
             return data.translatedText || text;
         } catch (error) {
-            console.error('خطا در LibreTranslate:', error);
+            console.error('LibreTranslate error:', error);
             
-            // اگر خطای CORS باشد، از Google Translate رایگان استفاده می‌کنیم
+            // If CORS error, use free Google Translate
             if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
-                console.log('استفاده از Google Translate رایگان به عنوان جایگزین...');
+                console.log('Using free Google Translate as fallback...');
                 return await this.fallbackTranslation(text, sourceLang, targetLang);
             }
             
-            // در صورت خطای دیگر، از ترجمه ساده استفاده می‌کنیم
+            // For other errors, use fallback translation
             return await this.fallbackTranslation(text, sourceLang, targetLang);
         }
     }
 
     /**
-     * ترجمه با استفاده از Google Translate API
+     * Translate using Google Translate API
      */
     async translateWithGoogle(text, sourceLang, targetLang) {
         if (!CONFIG.googleTranslateApiKey) {
-            throw new Error('Google Translate API Key تنظیم نشده است');
+            throw new Error('Google Translate API Key is not set');
         }
 
         const url = `https://translation.googleapis.com/language/translate/v2?key=${CONFIG.googleTranslateApiKey}`;
@@ -133,14 +133,14 @@ class TranslationService {
     }
 
     /**
-     * ترجمه با استفاده از Microsoft Translator API
+     * Translate using Microsoft Translator API
      */
     async translateWithMicrosoft(text, sourceLang, targetLang) {
         if (!CONFIG.microsoftTranslateKey) {
-            throw new Error('Microsoft Translator API Key تنظیم نشده است');
+            throw new Error('Microsoft Translator API Key is not set');
         }
 
-        // ابتدا باید token دریافت کنیم
+        // First, we need to get a token
         const tokenResponse = await fetch(
             `https://${CONFIG.microsoftTranslateRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`,
             {
@@ -173,12 +173,11 @@ class TranslationService {
     }
 
     /**
-     * ترجمه ساده به عنوان جایگزین (Fallback)
-     * استفاده از Google Translate API رایگان (بدون نیاز به API Key)
+     * Fallback translation using free Google Translate API (no API Key required)
      */
     async fallbackTranslation(text, sourceLang, targetLang) {
         try {
-            // استفاده از Google Translate API رایگان (بدون نیاز به API Key)
+            // Use free Google Translate API (no API Key required)
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
             
             const response = await fetch(url);
@@ -189,35 +188,35 @@ class TranslationService {
             
             const data = await response.json();
             
-            // استخراج متن ترجمه شده از پاسخ
+            // Extract translated text from response
             if (data && data[0] && data[0][0] && data[0][0][0]) {
                 return data[0].map(item => item[0]).join('');
             }
             
-            throw new Error('فرمت پاسخ نامعتبر است');
+            throw new Error('Invalid response format');
         } catch (error) {
-            console.error('خطا در ترجمه Fallback:', error);
-            // در صورت خطا، متن اصلی را برمی‌گردانیم
+            console.error('Fallback translation error:', error);
+            // On error, return original text
             return text;
         }
     }
 
     /**
-     * تنظیم زبان منبع
+     * Set source language
      */
     setSourceLanguage(lang) {
         this.currentSourceLang = lang;
     }
 
     /**
-     * تنظیم زبان هدف
+     * Set target language
      */
     setTargetLanguage(lang) {
         this.currentTargetLang = lang;
     }
 
     /**
-     * جابجایی زبان‌ها
+     * Swap languages
      */
     swapLanguages() {
         const temp = this.currentSourceLang;
@@ -226,6 +225,5 @@ class TranslationService {
     }
 }
 
-// ایجاد نمونه سراسری
+// Create global instance
 const translationService = new TranslationService();
-

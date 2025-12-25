@@ -1,55 +1,55 @@
-// تنظیمات و پیکربندی برنامه
+// Application configuration and settings
 
 const CONFIG = {
-    // زبان‌های پشتیبانی شده با کد ISO و پرچم
+    // Supported languages with ISO codes and flags
     languages: {
-        'auto': { name: 'تشخیص خودکار', flag: '🌐', code: 'auto' },
-        'en': { name: 'انگلیسی', flag: '🇬🇧', code: 'en' },
-        'fa': { name: 'فارسی', flag: '🇮🇷', code: 'fa' },
-        'ar': { name: 'عربی', flag: '🇸🇦', code: 'ar' },
-        'fr': { name: 'فرانسوی', flag: '🇫🇷', code: 'fr' },
-        'de': { name: 'آلمانی', flag: '🇩🇪', code: 'de' },
-        'es': { name: 'اسپانیایی', flag: '🇪🇸', code: 'es' },
-        'it': { name: 'ایتالیایی', flag: '🇮🇹', code: 'it' },
-        'ru': { name: 'روسی', flag: '🇷🇺', code: 'ru' },
-        'zh': { name: 'چینی', flag: '🇨🇳', code: 'zh' },
-        'ja': { name: 'ژاپنی', flag: '🇯🇵', code: 'ja' },
-        'ko': { name: 'کره‌ای', flag: '🇰🇷', code: 'ko' },
-        'tr': { name: 'ترکی', flag: '🇹🇷', code: 'tr' },
-        'hi': { name: 'هندی', flag: '🇮🇳', code: 'hi' },
-        'pt': { name: 'پرتغالی', flag: '🇵🇹', code: 'pt' },
-        'nl': { name: 'هلندی', flag: '🇳🇱', code: 'nl' },
-        'pl': { name: 'لهستانی', flag: '🇵🇱', code: 'pl' },
-        'sv': { name: 'سوئدی', flag: '🇸🇪', code: 'sv' },
-        'uk': { name: 'اوکراینی', flag: '🇺🇦', code: 'uk' }
+        'auto': { name: 'Auto Detect', flag: '🌐', code: 'auto' },
+        'en': { name: 'English', flag: '🇬🇧', code: 'en' },
+        'fa': { name: 'Persian', flag: '🇮🇷', code: 'fa' },
+        'ar': { name: 'Arabic', flag: '🇸🇦', code: 'ar' },
+        'fr': { name: 'French', flag: '🇫🇷', code: 'fr' },
+        'de': { name: 'German', flag: '🇩🇪', code: 'de' },
+        'es': { name: 'Spanish', flag: '🇪🇸', code: 'es' },
+        'it': { name: 'Italian', flag: '🇮🇹', code: 'it' },
+        'ru': { name: 'Russian', flag: '🇷🇺', code: 'ru' },
+        'zh': { name: 'Chinese', flag: '🇨🇳', code: 'zh' },
+        'ja': { name: 'Japanese', flag: '🇯🇵', code: 'ja' },
+        'ko': { name: 'Korean', flag: '🇰🇷', code: 'ko' },
+        'tr': { name: 'Turkish', flag: '🇹🇷', code: 'tr' },
+        'hi': { name: 'Hindi', flag: '🇮🇳', code: 'hi' },
+        'pt': { name: 'Portuguese', flag: '🇵🇹', code: 'pt' },
+        'nl': { name: 'Dutch', flag: '🇳🇱', code: 'nl' },
+        'pl': { name: 'Polish', flag: '🇵🇱', code: 'pl' },
+        'sv': { name: 'Swedish', flag: '🇸🇪', code: 'sv' },
+        'uk': { name: 'Ukrainian', flag: '🇺🇦', code: 'uk' }
     },
 
-    // زبان پیش‌فرض منبع و هدف
+    // Default source and target languages
     defaultSource: 'auto',
-    defaultTarget: 'fr',
+    defaultTarget: 'en',
 
-    // استفاده از API ترجمه
-    // گزینه 1: استفاده از LibreTranslate (رایگان و Open Source)
+    // Translation API options
+    // Option 1: Use LibreTranslate (Free and Open Source)
     useLibreTranslate: true,
-    libreTranslateUrl: 'https://libretranslate.com/translate', // یا سرور محلی خودتان
+    libreTranslateUrl: 'https://libretranslate.com/translate', // or your local server
 
-    // گزینه 2: استفاده از Google Translate (نیاز به API Key)
+    // Option 2: Use Google Translate (requires API Key)
     useGoogleTranslate: false,
-    googleTranslateApiKey: '', // API Key خود را اینجا قرار دهید
+    googleTranslateApiKey: '', // Enter your API Key here
 
-    // گزینه 3: استفاده از Microsoft Translator (نیاز به API Key)
+    // Option 3: Use Microsoft Translator (requires API Key)
     useMicrosoftTranslate: false,
-    microsoftTranslateKey: '', // API Key خود را اینجا قرار دهید
+    microsoftTranslateKey: '', // Enter your API Key here
     microsoftTranslateRegion: 'global',
 
-    // تنظیمات UI
-    autoTranslate: false, // ترجمه خودکار هنگام تایپ
-    autoTranslateDelay: 500, // تاخیر برای ترجمه خودکار (میلی‌ثانیه)
-    saveHistory: true, // ذخیره تاریخچه ترجمه‌ها
-    maxHistoryItems: 50 // حداکثر تعداد آیتم‌های تاریخچه
+    // UI settings
+    autoTranslate: false, // Auto translate while typing
+    autoTranslateDelay: 500, // Delay for auto translate (milliseconds)
+    saveHistory: true, // Save translation history
+    maxHistoryItems: 50 // Maximum number of history items
 };
 
-// ذخیره و بارگذاری تنظیمات از LocalStorage
+// Save and load settings from LocalStorage
 const Settings = {
     save: function() {
         const settings = {
@@ -69,12 +69,11 @@ const Settings = {
                 CONFIG.defaultTarget = settings.targetLanguage || CONFIG.defaultTarget;
                 CONFIG.autoTranslate = settings.autoTranslate || CONFIG.autoTranslate;
             } catch (e) {
-                console.error('خطا در بارگذاری تنظیمات:', e);
+                console.error('Error loading settings:', e);
             }
         }
     }
 };
 
-// بارگذاری تنظیمات هنگام لود شدن
+// Load settings on page load
 Settings.load();
-

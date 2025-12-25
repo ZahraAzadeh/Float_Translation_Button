@@ -29,7 +29,7 @@
 </head>
 <body>
     <!-- دکمه شناور اصلی -->
-    <button id="floatingBtn" class="floating-btn" aria-label="باز کردن ترجمه">
+    <button id="floatingBtn" class="floating-btn" aria-label="Open translation">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/>
         </svg>
@@ -40,12 +40,12 @@
         <!-- هدر پنل -->
         <div class="panel-header">
             <div class="header-icons">
-                <button id="swapBtn" class="icon-btn swap-btn" aria-label="جابجایی زبان‌ها">
+                <button id="swapBtn" class="icon-btn swap-btn" aria-label="Swap languages">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z" fill="currentColor"/>
                     </svg>
                 </button>
-                <button id="closeBtn" class="icon-btn close-btn" aria-label="بستن">
+                <button id="closeBtn" class="icon-btn close-btn" aria-label="Close">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
                     </svg>
@@ -62,12 +62,12 @@
                 <textarea 
                     id="sourceText" 
                     class="translation-textarea" 
-                    placeholder="متن خود را اینجا Paste کنید یا تایپ کنید..."
+                    placeholder="Paste or type your text here..."
                     rows="4"
                 ></textarea>
                 <div class="language-info">
-                    <span id="sourceLanguage" class="language-name">در حال تشخیص...</span>
-                    <button id="selectSourceLangBtn" class="select-lang-btn" aria-label="انتخاب زبان منبع">
+                    <span id="sourceLanguage" class="language-name">Detecting...</span>
+                    <button id="selectSourceLangBtn" class="select-lang-btn" aria-label="Select source language">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 10l5 5 5-5z" fill="currentColor"/>
                         </svg>
@@ -78,7 +78,7 @@
 
         <!-- آیکون ترجمه در وسط (قابل کلیک) -->
         <div class="translation-icon-container">
-            <button id="translateIconBtn" class="translation-icon-btn" aria-label="ترجمه">
+            <button id="translateIconBtn" class="translation-icon-btn" aria-label="Translate">
                 <div class="translation-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/>
@@ -90,21 +90,21 @@
         <!-- کادر خروجی ترجمه -->
         <div class="translation-box output-box">
             <div class="language-flag" id="targetFlag">
-                <span class="flag-emoji">🇫🇷</span>
+                <span class="flag-emoji">🇬🇧</span>
             </div>
             <div class="text-container">
                 <div id="targetText" class="translation-output">
-                    <span class="placeholder-text">ترجمه اینجا نمایش داده می‌شود...</span>
+                    <span class="placeholder-text">Translation will appear here...</span>
                 </div>
                 <div class="language-info">
-                    <span id="targetLanguage" class="language-name">فرانسوی</span>
+                    <span id="targetLanguage" class="language-name">English</span>
                     <div class="action-buttons-group">
-                        <button id="selectTargetLangBtn" class="select-lang-btn" aria-label="انتخاب زبان هدف">
+                        <button id="selectTargetLangBtn" class="select-lang-btn" aria-label="Select target language">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7 10l5 5 5-5z" fill="currentColor"/>
                             </svg>
                         </button>
-                        <button id="copyBtn" class="copy-btn" aria-label="کپی کردن">
+                        <button id="copyBtn" class="copy-btn" aria-label="Copy">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
                             </svg>

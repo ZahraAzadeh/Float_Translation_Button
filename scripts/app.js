@@ -1,4 +1,4 @@
-// منطق اصلی برنامه
+// Main application logic
 
 class TranslationApp {
     constructor() {
@@ -7,39 +7,39 @@ class TranslationApp {
     }
 
     /**
-     * مقداردهی اولیه برنامه
+     * Initialize the application
      */
     init() {
-        // بارگذاری تنظیمات
+        // Load settings
         Settings.load();
         
-        // تنظیم زبان‌های پیش‌فرض
+        // Set default languages
         this.currentSourceLang = CONFIG.defaultSource;
         this.currentTargetLang = CONFIG.defaultTarget;
 
-        // به‌روزرسانی UI
+        // Update UI
         uiManager.updateSourceLanguage(this.currentSourceLang);
         uiManager.updateTargetLanguage(this.currentTargetLang);
 
-        // تنظیم رویدادها
+        // Setup event listeners
         this.setupEventListeners();
         
-        console.log('اپلیکیشن ترجمه شناور آماده است!');
+        console.log('Floating Translation App is ready!');
     }
 
     /**
-     * تنظیم رویدادهای اصلی
+     * Setup main event listeners
      */
     setupEventListeners() {
-        // رویدادهای UI
+        // UI event listeners
         uiManager.setupEventListeners();
 
-        // آیکون ترجمه (دکمه ترجمه)
+        // Translation icon button
         uiManager.elements.translateIconBtn.addEventListener('click', () => {
             this.handleTranslate();
         });
         
-        // ترجمه با Enter
+        // Translate with Enter
         uiManager.elements.sourceText.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -47,32 +47,32 @@ class TranslationApp {
             }
         });
 
-        // دکمه جابجایی زبان‌ها
+        // Swap languages button
         uiManager.elements.swapBtn.addEventListener('click', () => {
             this.handleSwapLanguages();
         });
 
-        // تشخیص خودکار زبان هنگام تغییر متن
+        // Auto detect language on text change
         uiManager.elements.sourceText.addEventListener('input', () => {
             this.handleAutoDetect();
         });
     }
 
     /**
-     * مدیریت ترجمه
+     * Handle translation
      */
     async handleTranslate() {
         const sourceText = uiManager.getSourceText();
         
         if (!sourceText) {
-            uiManager.showStatus('لطفاً متنی برای ترجمه وارد کنید', 'error');
+            uiManager.showStatus('Please enter text to translate', 'error');
             return;
         }
 
         uiManager.showLoading();
 
         try {
-            // اگر زبان منبع auto است، ابتدا تشخیص می‌دهیم
+            // If source language is auto, detect it first
             let detectedLang = this.currentSourceLang;
             if (detectedLang === 'auto') {
                 detectedLang = languageDetector.detect(sourceText);
@@ -81,24 +81,24 @@ class TranslationApp {
                 uiManager.updateSourceLanguage(detectedLang);
             }
 
-            // ترجمه
+            // Translate
             const translatedText = await translationService.translate(
                 sourceText,
                 detectedLang,
                 this.currentTargetLang
             );
 
-            // نمایش نتیجه
+            // Display result
             uiManager.displayTranslation(translatedText);
-            uiManager.showStatus('ترجمه با موفقیت انجام شد!', 'success');
+            uiManager.showStatus('Translation completed successfully!', 'success');
 
-            // ذخیره در تاریخچه (اگر فعال باشد)
+            // Save to history (if enabled)
             if (CONFIG.saveHistory) {
                 this.saveToHistory(sourceText, translatedText, detectedLang, this.currentTargetLang);
             }
         } catch (error) {
-            console.error('خطا در ترجمه:', error);
-            uiManager.showStatus(error.message || 'خطا در ترجمه متن', 'error');
+            console.error('Translation error:', error);
+            uiManager.showStatus(error.message || 'Error translating text', 'error');
             uiManager.displayTranslation('');
         } finally {
             uiManager.hideLoading();
@@ -106,52 +106,52 @@ class TranslationApp {
     }
 
     /**
-     * تشخیص خودکار زبان
+     * Auto detect language
      */
     handleAutoDetect() {
         const sourceText = uiManager.getSourceText();
         
         if (!sourceText || sourceText.trim().length === 0) {
-            // اگر متن خالی است و زبان منبع auto نیست، به auto برمی‌گردیم
+            // If text is empty and source language is not auto, return to auto
             if (this.currentSourceLang !== 'auto') {
-                // فقط اگر کاربر به صورت دستی زبان را تغییر نداده باشد
-                // اینجا می‌توانید منطق خود را اضافه کنید
+                // Only if user hasn't manually changed the language
+                // You can add your own logic here
             }
             return;
         }
 
-        // اگر زبان منبع auto است، زبان را تشخیص می‌دهیم
+        // If source language is auto, detect the language
         if (this.currentSourceLang === 'auto') {
             const detectedLang = languageDetector.detect(sourceText);
-            this.currentSourceLang = detectedLang; // به‌روزرسانی زبان منبع
+            this.currentSourceLang = detectedLang; // Update source language
             translationService.setSourceLanguage(detectedLang);
-            uiManager.updateSourceLanguage(detectedLang); // نمایش در کادر منبع (نه کادر هدف)
+            uiManager.updateSourceLanguage(detectedLang); // Display in source box (not target box)
         }
     }
 
     /**
-     * تنظیم زبان منبع
+     * Set source language
      */
     setSourceLanguage(langCode) {
         this.currentSourceLang = langCode;
         translationService.setSourceLanguage(langCode);
         uiManager.updateSourceLanguage(langCode);
-        uiManager.showStatus(`زبان منبع به ${CONFIG.languages[langCode]?.name || langCode} تغییر کرد`, 'success');
+        uiManager.showStatus(`Source language changed to ${CONFIG.languages[langCode]?.name || langCode}`, 'success');
     }
 
     /**
-     * تنظیم زبان هدف
+     * Set target language
      */
     setTargetLanguage(langCode) {
         this.currentTargetLang = langCode;
         translationService.setTargetLanguage(langCode);
         uiManager.updateTargetLanguage(langCode);
-        uiManager.showStatus(`زبان هدف به ${CONFIG.languages[langCode]?.name || langCode} تغییر کرد`, 'success');
+        uiManager.showStatus(`Target language changed to ${CONFIG.languages[langCode]?.name || langCode}`, 'success');
         
-        // اگر متن منبع وجود دارد، دوباره ترجمه کن
+        // If source text exists, retranslate
         const sourceText = uiManager.getSourceText();
         if (sourceText && sourceText.trim().length > 0) {
-            // ترجمه مجدد با زبان جدید
+            // Retranslate with new language
             setTimeout(() => {
                 this.handleTranslate();
             }, 300);
@@ -159,33 +159,33 @@ class TranslationApp {
     }
 
     /**
-     * جابجایی زبان‌ها
+     * Swap languages
      */
     handleSwapLanguages() {
-        // جابجایی در سرویس ترجمه
+        // Swap in translation service
         translationService.swapLanguages();
         
-        // جابجایی در برنامه
+        // Swap in application
         const temp = this.currentSourceLang;
         this.currentSourceLang = this.currentTargetLang;
         this.currentTargetLang = temp;
 
-        // جابجایی متن‌ها
+        // Swap texts
         const sourceText = uiManager.getSourceText();
         const targetText = uiManager.elements.targetText.textContent;
         
-        uiManager.elements.sourceText.value = targetText.includes('ترجمه اینجا') ? '' : targetText;
+        uiManager.elements.sourceText.value = targetText.includes('Translation will appear here') ? '' : targetText;
         uiManager.displayTranslation(sourceText);
 
-        // به‌روزرسانی UI
+        // Update UI
         uiManager.updateSourceLanguage(this.currentSourceLang);
         uiManager.updateTargetLanguage(this.currentTargetLang);
 
-        uiManager.showStatus('زبان‌ها جابجا شدند', 'success');
+        uiManager.showStatus('Languages swapped', 'success');
     }
 
     /**
-     * ذخیره در تاریخچه
+     * Save to history
      */
     saveToHistory(sourceText, translatedText, sourceLang, targetLang) {
         try {
@@ -199,42 +199,41 @@ class TranslationApp {
                 timestamp: new Date().toISOString()
             });
 
-            // محدود کردن تعداد آیتم‌ها
+            // Limit number of items
             if (history.length > CONFIG.maxHistoryItems) {
                 history = history.slice(0, CONFIG.maxHistoryItems);
             }
 
             localStorage.setItem('translationHistory', JSON.stringify(history));
         } catch (error) {
-            console.error('خطا در ذخیره تاریخچه:', error);
+            console.error('Error saving history:', error);
         }
     }
 
     /**
-     * دریافت تاریخچه
+     * Get history
      */
     getHistory() {
         try {
             return JSON.parse(localStorage.getItem('translationHistory') || '[]');
         } catch (error) {
-            console.error('خطا در دریافت تاریخچه:', error);
+            console.error('Error getting history:', error);
             return [];
         }
     }
 
     /**
-     * پاک کردن تاریخچه
+     * Clear history
      */
     clearHistory() {
         localStorage.removeItem('translationHistory');
     }
 }
 
-// ایجاد نمونه برنامه
+// Create application instance
 const app = new TranslationApp();
 
-// راه‌اندازی برنامه هنگام لود شدن صفحه
+// Initialize application on page load
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
 });
-

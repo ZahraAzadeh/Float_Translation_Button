@@ -1,8 +1,8 @@
-// تشخیص خودکار زبان متن
+// Automatic language detection for text
 
 class LanguageDetector {
     constructor() {
-        // الگوهای زبان‌های مختلف برای تشخیص ساده
+        // Character patterns for different languages for simple detection
         this.patterns = {
             'fa': /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/,
             'ar': /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/,
@@ -16,7 +16,7 @@ class LanguageDetector {
             'bn': /[\u0980-\u09FF]/
         };
 
-        // کلمات رایج برای تشخیص زبان
+        // Common words for language detection
         this.commonWords = {
             'en': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i'],
             'fa': ['و', 'در', 'به', 'از', 'که', 'این', 'است', 'را', 'با', 'برای'],
@@ -40,9 +40,9 @@ class LanguageDetector {
     }
 
     /**
-     * تشخیص زبان متن با استفاده از الگوها و کلمات رایج
-     * @param {string} text - متن ورودی
-     * @returns {string} - کد زبان تشخیص داده شده
+     * Detect text language using patterns and common words
+     * @param {string} text - Input text
+     * @returns {string} - Detected language code
      */
     detect(text) {
         if (!text || text.trim().length === 0) {
@@ -51,14 +51,14 @@ class LanguageDetector {
 
         const cleanText = text.toLowerCase().trim();
         
-        // بررسی الگوهای کاراکتری
+        // Check character patterns
         for (const [lang, pattern] of Object.entries(this.patterns)) {
             if (pattern.test(text)) {
                 return lang;
             }
         }
 
-        // شمارش کلمات رایج
+        // Count common words
         const wordCounts = {};
         for (const [lang, words] of Object.entries(this.commonWords)) {
             let count = 0;
@@ -73,7 +73,7 @@ class LanguageDetector {
             }
         }
 
-        // بازگرداندن زبان با بیشترین تعداد کلمات رایج
+        // Return language with most common words
         if (Object.keys(wordCounts).length > 0) {
             const detectedLang = Object.keys(wordCounts).reduce((a, b) => 
                 wordCounts[a] > wordCounts[b] ? a : b
@@ -81,41 +81,40 @@ class LanguageDetector {
             return detectedLang;
         }
 
-        // اگر نتوانست تشخیص دهد، از API استفاده می‌کنیم
+        // If couldn't detect, use API
         return this.detectWithAPI(text);
     }
 
     /**
-     * تشخیص زبان با استفاده از API (در صورت نیاز)
-     * @param {string} text - متن ورودی
-     * @returns {Promise<string>} - کد زبان
+     * Detect language using API (if needed)
+     * @param {string} text - Input text
+     * @returns {Promise<string>} - Language code
      */
     async detectWithAPI(text) {
-        // در اینجا می‌توانید از API های تشخیص زبان استفاده کنید
-        // برای مثال: Google Cloud Translation API, Microsoft Translator API
-        // فعلاً به صورت پیش‌فرض انگلیسی برمی‌گرداند
+        // Here you can use language detection APIs
+        // For example: Google Cloud Translation API, Microsoft Translator API
+        // Currently returns English as default
         return 'en';
     }
 
     /**
-     * دریافت نام زبان از کد
-     * @param {string} langCode - کد زبان
-     * @returns {string} - نام زبان
+     * Get language name from code
+     * @param {string} langCode - Language code
+     * @returns {string} - Language name
      */
     getLanguageName(langCode) {
-        return CONFIG.languages[langCode]?.name || 'نامشخص';
+        return CONFIG.languages[langCode]?.name || 'Unknown';
     }
 
     /**
-     * دریافت پرچم زبان از کد
-     * @param {string} langCode - کد زبان
-     * @returns {string} - emoji پرچم
+     * Get language flag from code
+     * @param {string} langCode - Language code
+     * @returns {string} - Flag emoji
      */
     getLanguageFlag(langCode) {
         return CONFIG.languages[langCode]?.flag || '🌐';
     }
 }
 
-// ایجاد نمونه سراسری
+// Create global instance
 const languageDetector = new LanguageDetector();
-

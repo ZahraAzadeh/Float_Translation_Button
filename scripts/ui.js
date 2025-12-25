@@ -1,4 +1,4 @@
-// مدیریت رابط کاربری
+// User interface management
 
 class UIManager {
     constructor() {
@@ -28,7 +28,7 @@ class UIManager {
     }
 
     /**
-     * باز کردن پنل ترجمه
+     * Open translation panel
      */
     openPanel() {
         this.elements.translationPanel.classList.remove('hidden');
@@ -38,7 +38,7 @@ class UIManager {
     }
 
     /**
-     * بستن پنل ترجمه
+     * Close translation panel
      */
     closePanel() {
         this.elements.translationPanel.classList.add('hidden');
@@ -48,7 +48,7 @@ class UIManager {
     }
 
     /**
-     * به‌روزرسانی پرچم و نام زبان منبع
+     * Update source language flag and name
      */
     updateSourceLanguage(langCode) {
         const lang = CONFIG.languages[langCode];
@@ -59,7 +59,7 @@ class UIManager {
     }
 
     /**
-     * به‌روزرسانی پرچم و نام زبان هدف
+     * Update target language flag and name
      */
     updateTargetLanguage(langCode) {
         const lang = CONFIG.languages[langCode];
@@ -70,7 +70,7 @@ class UIManager {
     }
 
     /**
-     * نمایش متن ترجمه شده
+     * Display translated text
      */
     displayTranslation(text) {
         if (text && text.trim()) {
@@ -78,12 +78,12 @@ class UIManager {
             this.elements.targetText.textContent = text;
             this.elements.targetText.classList.remove('placeholder-text');
         } else {
-            this.elements.targetText.innerHTML = '<span class="placeholder-text">ترجمه اینجا نمایش داده می‌شود...</span>';
+            this.elements.targetText.innerHTML = '<span class="placeholder-text">Translation will appear here...</span>';
         }
     }
 
     /**
-     * نمایش وضعیت (Loading, Success, Error)
+     * Show status message (Loading, Success, Error)
      */
     showStatus(message, type = 'success') {
         this.elements.statusMessage.textContent = message;
@@ -98,7 +98,7 @@ class UIManager {
     }
 
     /**
-     * پاک کردن پیام وضعیت
+     * Clear status message
      */
     clearStatus() {
         this.elements.statusMessage.classList.add('hidden');
@@ -106,17 +106,17 @@ class UIManager {
     }
 
     /**
-     * نمایش حالت Loading
+     * Show loading state
      */
     showLoading() {
         if (this.elements.translateIconBtn) {
             this.elements.translateIconBtn.disabled = true;
         }
-        this.showStatus('در حال ترجمه...', 'loading');
+        this.showStatus('Translating...', 'loading');
     }
 
     /**
-     * پنهان کردن حالت Loading
+     * Hide loading state
      */
     hideLoading() {
         if (this.elements.translateIconBtn) {
@@ -125,20 +125,20 @@ class UIManager {
     }
 
     /**
-     * کپی کردن متن ترجمه شده
+     * Copy translated text
      */
     async copyTranslation() {
         const text = this.elements.targetText.textContent;
-        if (!text || text.includes('ترجمه اینجا')) {
-            this.showStatus('متن ترجمه‌ای برای کپی وجود ندارد', 'error');
+        if (!text || text.includes('Translation will appear here')) {
+            this.showStatus('No translation text to copy', 'error');
             return;
         }
 
         try {
             await navigator.clipboard.writeText(text);
-            this.showStatus('متن با موفقیت کپی شد!', 'success');
+            this.showStatus('Text copied successfully!', 'success');
             
-            // تغییر موقت آیکون کپی
+            // Temporarily change copy icon
             const originalHTML = this.elements.copyBtn.innerHTML;
             this.elements.copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>';
             
@@ -146,34 +146,34 @@ class UIManager {
                 this.elements.copyBtn.innerHTML = originalHTML;
             }, 2000);
         } catch (error) {
-            console.error('خطا در کپی:', error);
-            this.showStatus('خطا در کپی کردن متن', 'error');
+            console.error('Copy error:', error);
+            this.showStatus('Error copying text', 'error');
         }
     }
 
     /**
-     * دریافت متن منبع
+     * Get source text
      */
     getSourceText() {
         return this.elements.sourceText.value.trim();
     }
 
     /**
-     * پاک کردن متن منبع
+     * Clear source text
      */
     clearSourceText() {
         this.elements.sourceText.value = '';
-        this.elements.targetText.innerHTML = '<span class="placeholder-text">ترجمه اینجا نمایش داده می‌شود...</span>';
+        this.elements.targetText.innerHTML = '<span class="placeholder-text">Translation will appear here...</span>';
     }
 
     /**
-     * نمایش منوی انتخاب زبان
+     * Show language selector menu
      */
     showLanguageSelector(type, currentLang, buttonElement) {
-        // اگر منوی دیگری باز است، ببند
+        // If another menu is open, close it
         if (this.elements.languageSelector.classList.contains('show')) {
             this.hideLanguageSelector();
-            // اگر همان دکمه است، فقط ببند
+            // If it's the same button, just close
             if (this.currentSelectorType === type) {
                 return;
             }
@@ -183,15 +183,15 @@ class UIManager {
         const selector = this.elements.languageSelector;
         selector.innerHTML = '';
         
-        // موقعیت منو را تنظیم می‌کنیم (بهتر برای RTL)
+        // Calculate menu position (better for RTL)
         const rect = buttonElement.getBoundingClientRect();
         const panelRect = this.elements.translationPanel.getBoundingClientRect();
         
-        // محاسبه موقعیت بهتر
+        // Calculate better position
         let top = rect.bottom - panelRect.top + 5;
-        let left = rect.left - panelRect.left - 150; // برای RTL
+        let left = rect.left - panelRect.left - 150; // For RTL
         
-        // اگر از سمت راست خارج می‌شود، از سمت چپ نمایش بده
+        // If it goes off the right side, show from the left
         if (left < 10) {
             left = rect.right - panelRect.left + 5;
         }
@@ -199,10 +199,10 @@ class UIManager {
         selector.style.top = top + 'px';
         selector.style.left = left + 'px';
         
-        // ایجاد لیست زبان‌ها
+        // Create language list
         Object.entries(CONFIG.languages).forEach(([code, lang]) => {
-            // برای زبان منبع، 'auto' را هم نشان می‌دهیم
-            // برای زبان هدف، 'auto' را نشان نمی‌دهیم
+            // For source language, show 'auto' too
+            // For target language, don't show 'auto'
             if (type === 'source' || code !== 'auto') {
                 const option = document.createElement('div');
                 option.className = 'language-option';
@@ -229,7 +229,7 @@ class UIManager {
     }
     
     /**
-     * پنهان کردن منوی انتخاب زبان
+     * Hide language selector menu
      */
     hideLanguageSelector() {
         this.elements.languageSelector.classList.remove('show');
@@ -237,7 +237,7 @@ class UIManager {
     }
     
     /**
-     * انتخاب زبان
+     * Select language
      */
     selectLanguage(type, langCode) {
         if (type === 'source') {
@@ -248,29 +248,29 @@ class UIManager {
     }
 
     /**
-     * تنظیم رویدادهای UI
+     * Setup UI event listeners
      */
     setupEventListeners() {
-        // باز کردن پنل
+        // Open panel
         this.elements.floatingBtn.addEventListener('click', () => {
             this.openPanel();
         });
 
-        // بستن پنل
+        // Close panel
         this.elements.closeBtn.addEventListener('click', () => {
             this.closePanel();
         });
 
-        // بستن با کلیک خارج از پنل
+        // Close on outside click
         document.addEventListener('click', (e) => {
             if (this.isPanelOpen && 
                 !this.elements.translationPanel.contains(e.target) && 
                 !this.elements.floatingBtn.contains(e.target)) {
-                // این قابلیت را می‌توانید فعال کنید اگر می‌خواهید
+                // You can enable this feature if you want
                 // this.closePanel();
             }
             
-            // بستن منوی انتخاب زبان
+            // Close language selector
             if (!this.elements.languageSelector.contains(e.target) && 
                 !this.elements.selectSourceLangBtn.contains(e.target) &&
                 !this.elements.selectTargetLangBtn.contains(e.target)) {
@@ -278,26 +278,26 @@ class UIManager {
             }
         });
 
-        // انتخاب زبان منبع
+        // Select source language
         this.elements.selectSourceLangBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const currentLang = app.currentSourceLang;
             this.showLanguageSelector('source', currentLang, this.elements.selectSourceLangBtn);
         });
 
-        // انتخاب زبان هدف
+        // Select target language
         this.elements.selectTargetLangBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const currentLang = app.currentTargetLang;
             this.showLanguageSelector('target', currentLang, this.elements.selectTargetLangBtn);
         });
 
-        // کپی کردن
+        // Copy
         this.elements.copyBtn.addEventListener('click', () => {
             this.copyTranslation();
         });
 
-        // ترجمه خودکار هنگام تایپ (اگر فعال باشد)
+        // Auto translate while typing (if enabled)
         if (CONFIG.autoTranslate) {
             this.elements.sourceText.addEventListener('input', () => {
                 clearTimeout(this.autoTranslateTimeout);
@@ -309,7 +309,7 @@ class UIManager {
             });
         }
 
-        // ترجمه با Enter + Ctrl
+        // Translate with Ctrl + Enter
         this.elements.sourceText.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault();
@@ -319,6 +319,5 @@ class UIManager {
     }
 }
 
-// ایجاد نمونه سراسری
+// Create global instance
 const uiManager = new UIManager();
-
