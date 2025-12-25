@@ -1,16 +1,22 @@
 // Service Worker برای PWA
 const CACHE_NAME = 'translation-app-v1';
+
+// تشخیص مسیر base برای GitHub Pages
+const BASE_PATH = self.location.pathname.includes('/Float_Translation_Button/') 
+    ? '/Float_Translation_Button' 
+    : '';
+
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles/main.css',
-  '/styles/themes.css',
-  '/scripts/config.js',
-  '/scripts/language-detection.js',
-  '/scripts/translation.js',
-  '/scripts/ui.js',
-  '/scripts/app.js',
-  '/manifest.json'
+  BASE_PATH + '/',
+  BASE_PATH + '/index.html',
+  BASE_PATH + '/styles/main.css',
+  BASE_PATH + '/styles/themes.css',
+  BASE_PATH + '/scripts/config.js',
+  BASE_PATH + '/scripts/language-detection.js',
+  BASE_PATH + '/scripts/translation.js',
+  BASE_PATH + '/scripts/ui.js',
+  BASE_PATH + '/scripts/app.js',
+  BASE_PATH + '/manifest.json'
 ];
 
 // نصب Service Worker
@@ -74,7 +80,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // در صورت خطا، صفحه offline را برگردان
         if (event.request.destination === 'document') {
-          return caches.match('/index.html');
+          return caches.match(BASE_PATH + '/index.html');
         }
       })
   );

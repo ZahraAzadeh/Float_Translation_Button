@@ -104,8 +104,10 @@ class TranslationApp {
         const sourceText = uiManager.getSourceText();
         
         if (!sourceText || sourceText.trim().length === 0) {
-            if (this.currentSourceLang === 'auto') {
-                uiManager.updateSourceLanguage('auto');
+            // اگر متن خالی است و زبان منبع auto نیست، به auto برمی‌گردیم
+            if (this.currentSourceLang !== 'auto') {
+                // فقط اگر کاربر به صورت دستی زبان را تغییر نداده باشد
+                // اینجا می‌توانید منطق خود را اضافه کنید
             }
             return;
         }
@@ -113,9 +115,30 @@ class TranslationApp {
         // اگر زبان منبع auto است، زبان را تشخیص می‌دهیم
         if (this.currentSourceLang === 'auto') {
             const detectedLang = languageDetector.detect(sourceText);
+            this.currentSourceLang = detectedLang; // به‌روزرسانی زبان منبع
             translationService.setSourceLanguage(detectedLang);
-            uiManager.updateSourceLanguage(detectedLang);
+            uiManager.updateSourceLanguage(detectedLang); // نمایش در کادر منبع (نه کادر هدف)
         }
+    }
+
+    /**
+     * تنظیم زبان منبع
+     */
+    setSourceLanguage(langCode) {
+        this.currentSourceLang = langCode;
+        translationService.setSourceLanguage(langCode);
+        uiManager.updateSourceLanguage(langCode);
+        uiManager.showStatus(`زبان منبع به ${CONFIG.languages[langCode]?.name || langCode} تغییر کرد`, 'success');
+    }
+
+    /**
+     * تنظیم زبان هدف
+     */
+    setTargetLanguage(langCode) {
+        this.currentTargetLang = langCode;
+        translationService.setTargetLanguage(langCode);
+        uiManager.updateTargetLanguage(langCode);
+        uiManager.showStatus(`زبان هدف به ${CONFIG.languages[langCode]?.name || langCode} تغییر کرد`, 'success');
     }
 
     /**

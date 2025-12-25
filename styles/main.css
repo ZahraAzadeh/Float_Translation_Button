@@ -233,6 +233,31 @@ body {
     font-weight: 500;
 }
 
+.action-buttons-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.select-lang-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.select-lang-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
 .copy-btn {
     width: 28px;
     height: 28px;
@@ -378,6 +403,54 @@ body {
     background: rgba(255, 255, 255, 0.5);
 }
 
+/* منوی انتخاب زبان */
+.language-selector {
+    position: absolute;
+    background: #2b2b2e;
+    border-radius: 12px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    min-width: 200px;
+    display: none;
+}
+
+.language-selector.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.language-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    margin-bottom: 5px;
+}
+
+.language-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.language-option.selected {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+.language-option-flag {
+    font-size: 20px;
+}
+
+.language-option-name {
+    flex: 1;
+    font-size: 14px;
+    color: white;
+}
+
 /* ریسپانسیو */
 @media (max-width: 480px) {
     .translation-panel {
@@ -392,6 +465,11 @@ body {
         right: 20px;
         width: 50px;
         height: 50px;
+    }
+    
+    .language-selector {
+        min-width: 180px;
+        max-height: 250px;
     }
 }
 

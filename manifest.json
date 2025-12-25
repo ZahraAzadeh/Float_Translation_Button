@@ -2,7 +2,7 @@
   "name": "اپلیکیشن ترجمه شناور",
   "short_name": "ترجمه شناور",
   "description": "یک اپلیکیشن ترجمه شناور و زیبا برای ترجمه سریع متن",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1e1e1e",
   "theme_color": "#667eea",

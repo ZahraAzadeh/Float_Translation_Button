@@ -15,8 +15,13 @@ class UIManager {
             targetLanguage: document.getElementById('targetLanguage'),
             translateBtn: document.getElementById('translateBtn'),
             copyBtn: document.getElementById('copyBtn'),
-            statusMessage: document.getElementById('statusMessage')
+            statusMessage: document.getElementById('statusMessage'),
+            selectSourceLangBtn: document.getElementById('selectSourceLangBtn'),
+            selectTargetLangBtn: document.getElementById('selectTargetLangBtn'),
+            languageSelector: document.getElementById('languageSelector')
         };
+        
+        this.currentSelectorType = null; // 'source' or 'target'
 
         this.isPanelOpen = false;
         this.autoTranslateTimeout = null;
@@ -160,6 +165,65 @@ class UIManager {
     }
 
     /**
+     * نمایش منوی انتخاب زبان
+     */
+    showLanguageSelector(type, currentLang, buttonElement) {
+        this.currentSelectorType = type;
+        const selector = this.elements.languageSelector;
+        selector.innerHTML = '';
+        
+        // موقعیت منو را تنظیم می‌کنیم
+        const rect = buttonElement.getBoundingClientRect();
+        selector.style.top = (rect.bottom + 5) + 'px';
+        selector.style.left = (rect.left - 100) + 'px';
+        
+        // ایجاد لیست زبان‌ها
+        Object.entries(CONFIG.languages).forEach(([code, lang]) => {
+            // برای زبان منبع، 'auto' را هم نشان می‌دهیم
+            if (type === 'source' || code !== 'auto') {
+                const option = document.createElement('div');
+                option.className = 'language-option';
+                if (code === currentLang) {
+                    option.classList.add('selected');
+                }
+                
+                option.innerHTML = `
+                    <span class="language-option-flag">${lang.flag}</span>
+                    <span class="language-option-name">${lang.name}</span>
+                `;
+                
+                option.addEventListener('click', () => {
+                    this.selectLanguage(type, code);
+                    this.hideLanguageSelector();
+                });
+                
+                selector.appendChild(option);
+            }
+        });
+        
+        selector.classList.add('show');
+    }
+    
+    /**
+     * پنهان کردن منوی انتخاب زبان
+     */
+    hideLanguageSelector() {
+        this.elements.languageSelector.classList.remove('show');
+        this.currentSelectorType = null;
+    }
+    
+    /**
+     * انتخاب زبان
+     */
+    selectLanguage(type, langCode) {
+        if (type === 'source') {
+            app.setSourceLanguage(langCode);
+        } else {
+            app.setTargetLanguage(langCode);
+        }
+    }
+
+    /**
      * تنظیم رویدادهای UI
      */
     setupEventListeners() {
@@ -181,6 +245,27 @@ class UIManager {
                 // این قابلیت را می‌توانید فعال کنید اگر می‌خواهید
                 // this.closePanel();
             }
+            
+            // بستن منوی انتخاب زبان
+            if (!this.elements.languageSelector.contains(e.target) && 
+                !this.elements.selectSourceLangBtn.contains(e.target) &&
+                !this.elements.selectTargetLangBtn.contains(e.target)) {
+                this.hideLanguageSelector();
+            }
+        });
+
+        // انتخاب زبان منبع
+        this.elements.selectSourceLangBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const currentLang = app.currentSourceLang;
+            this.showLanguageSelector('source', currentLang, this.elements.selectSourceLangBtn);
+        });
+
+        // انتخاب زبان هدف
+        this.elements.selectTargetLangBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const currentLang = app.currentTargetLang;
+            this.showLanguageSelector('target', currentLang, this.elements.selectTargetLangBtn);
         });
 
         // کپی کردن
