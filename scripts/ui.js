@@ -13,7 +13,7 @@ class UIManager {
             targetFlag: document.getElementById('targetFlag'),
             sourceLanguage: document.getElementById('sourceLanguage'),
             targetLanguage: document.getElementById('targetLanguage'),
-            translateBtn: document.getElementById('translateBtn'),
+            translateIconBtn: document.getElementById('translateIconBtn'),
             copyBtn: document.getElementById('copyBtn'),
             statusMessage: document.getElementById('statusMessage'),
             selectSourceLangBtn: document.getElementById('selectSourceLangBtn'),
@@ -109,8 +109,9 @@ class UIManager {
      * نمایش حالت Loading
      */
     showLoading() {
-        this.elements.translateBtn.disabled = true;
-        this.elements.translateBtn.innerHTML = '<span>در حال ترجمه...</span>';
+        if (this.elements.translateIconBtn) {
+            this.elements.translateIconBtn.disabled = true;
+        }
         this.showStatus('در حال ترجمه...', 'loading');
     }
 
@@ -118,8 +119,9 @@ class UIManager {
      * پنهان کردن حالت Loading
      */
     hideLoading() {
-        this.elements.translateBtn.disabled = false;
-        this.elements.translateBtn.innerHTML = '<span>ترجمه</span>';
+        if (this.elements.translateIconBtn) {
+            this.elements.translateIconBtn.disabled = false;
+        }
     }
 
     /**

@@ -34,9 +34,17 @@ class TranslationApp {
         // رویدادهای UI
         uiManager.setupEventListeners();
 
-        // دکمه ترجمه
-        uiManager.elements.translateBtn.addEventListener('click', () => {
+        // آیکون ترجمه (دکمه ترجمه)
+        uiManager.elements.translateIconBtn.addEventListener('click', () => {
             this.handleTranslate();
+        });
+        
+        // ترجمه با Enter
+        uiManager.elements.sourceText.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.handleTranslate();
+            }
         });
 
         // دکمه جابجایی زبان‌ها

@@ -40,8 +40,8 @@ class TranslationService {
             } else if (CONFIG.useMicrosoftTranslate) {
                 translatedText = await this.translateWithMicrosoft(text, sourceLang, target);
             } else {
-                // استفاده از LibreTranslate به صورت پیش‌فرض
-                translatedText = await this.translateWithLibreTranslate(text, sourceLang, target);
+                // استفاده از Google Translate رایگان به صورت پیش‌فرض
+                translatedText = await this.fallbackTranslation(text, sourceLang, target);
             }
 
             return translatedText;
@@ -90,13 +90,14 @@ class TranslationService {
         } catch (error) {
             console.error('خطا در LibreTranslate:', error);
             
-            // اگر خطای CORS باشد، راهنمایی به کاربر
+            // اگر خطای CORS باشد، از Google Translate رایگان استفاده می‌کنیم
             if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
-                throw new Error('برای استفاده از LibreTranslate، نیاز به سرور با CORS فعال است. لطفاً از Google Translate API یا Microsoft Translator استفاده کنید.');
+                console.log('استفاده از Google Translate رایگان به عنوان جایگزین...');
+                return await this.fallbackTranslation(text, sourceLang, targetLang);
             }
             
-            // در صورت خطا، از ترجمه ساده استفاده می‌کنیم
-            return this.fallbackTranslation(text, sourceLang, targetLang);
+            // در صورت خطای دیگر، از ترجمه ساده استفاده می‌کنیم
+            return await this.fallbackTranslation(text, sourceLang, targetLang);
         }
     }
 
@@ -173,11 +174,32 @@ class TranslationService {
 
     /**
      * ترجمه ساده به عنوان جایگزین (Fallback)
+     * استفاده از Google Translate API رایگان (بدون نیاز به API Key)
      */
-    fallbackTranslation(text, sourceLang, targetLang) {
-        // این یک ترجمه ساده است که فقط برای نمایش استفاده می‌شود
-        // در واقعیت باید از یک API واقعی استفاده کنید
-        return `[ترجمه: ${text}]`;
+    async fallbackTranslation(text, sourceLang, targetLang) {
+        try {
+            // استفاده از Google Translate API رایگان (بدون نیاز به API Key)
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // استخراج متن ترجمه شده از پاسخ
+            if (data && data[0] && data[0][0] && data[0][0][0]) {
+                return data[0].map(item => item[0]).join('');
+            }
+            
+            throw new Error('فرمت پاسخ نامعتبر است');
+        } catch (error) {
+            console.error('خطا در ترجمه Fallback:', error);
+            // در صورت خطا، متن اصلی را برمی‌گردانیم
+            return text;
+        }
     }
 
     /**
