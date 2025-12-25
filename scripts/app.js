@@ -139,6 +139,15 @@ class TranslationApp {
         translationService.setTargetLanguage(langCode);
         uiManager.updateTargetLanguage(langCode);
         uiManager.showStatus(`زبان هدف به ${CONFIG.languages[langCode]?.name || langCode} تغییر کرد`, 'success');
+        
+        // اگر متن منبع وجود دارد، دوباره ترجمه کن
+        const sourceText = uiManager.getSourceText();
+        if (sourceText && sourceText.trim().length > 0) {
+            // ترجمه مجدد با زبان جدید
+            setTimeout(() => {
+                this.handleTranslate();
+            }, 300);
+        }
     }
 
     /**

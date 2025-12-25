@@ -168,18 +168,39 @@ class UIManager {
      * نمایش منوی انتخاب زبان
      */
     showLanguageSelector(type, currentLang, buttonElement) {
+        // اگر منوی دیگری باز است، ببند
+        if (this.elements.languageSelector.classList.contains('show')) {
+            this.hideLanguageSelector();
+            // اگر همان دکمه است، فقط ببند
+            if (this.currentSelectorType === type) {
+                return;
+            }
+        }
+        
         this.currentSelectorType = type;
         const selector = this.elements.languageSelector;
         selector.innerHTML = '';
         
-        // موقعیت منو را تنظیم می‌کنیم
+        // موقعیت منو را تنظیم می‌کنیم (بهتر برای RTL)
         const rect = buttonElement.getBoundingClientRect();
-        selector.style.top = (rect.bottom + 5) + 'px';
-        selector.style.left = (rect.left - 100) + 'px';
+        const panelRect = this.elements.translationPanel.getBoundingClientRect();
+        
+        // محاسبه موقعیت بهتر
+        let top = rect.bottom - panelRect.top + 5;
+        let left = rect.left - panelRect.left - 150; // برای RTL
+        
+        // اگر از سمت راست خارج می‌شود، از سمت چپ نمایش بده
+        if (left < 10) {
+            left = rect.right - panelRect.left + 5;
+        }
+        
+        selector.style.top = top + 'px';
+        selector.style.left = left + 'px';
         
         // ایجاد لیست زبان‌ها
         Object.entries(CONFIG.languages).forEach(([code, lang]) => {
             // برای زبان منبع، 'auto' را هم نشان می‌دهیم
+            // برای زبان هدف، 'auto' را نشان نمی‌دهیم
             if (type === 'source' || code !== 'auto') {
                 const option = document.createElement('div');
                 option.className = 'language-option';
@@ -192,7 +213,8 @@ class UIManager {
                     <span class="language-option-name">${lang.name}</span>
                 `;
                 
-                option.addEventListener('click', () => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     this.selectLanguage(type, code);
                     this.hideLanguageSelector();
                 });
