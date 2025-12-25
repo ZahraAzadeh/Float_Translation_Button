@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="اپلیکیشن ترجمه شناور برای ترجمه سریع متن">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ترجمه شناور">
+    <title>اپلیکیشن ترجمه شناور</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+</head>
+<body>
+    <!-- دکمه شناور اصلی -->
+    <button id="floatingBtn" class="floating-btn" aria-label="باز کردن ترجمه">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/>
+        </svg>
+    </button>
+
+    <!-- پنل ترجمه -->
+    <div id="translationPanel" class="translation-panel hidden">
+        <!-- هدر پنل -->
+        <div class="panel-header">
+            <div class="header-icons">
+                <button id="swapBtn" class="icon-btn swap-btn" aria-label="جابجایی زبان‌ها">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button id="closeBtn" class="icon-btn close-btn" aria-label="بستن">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- کادر ورودی متن -->
+        <div class="translation-box input-box">
+            <div class="language-flag" id="sourceFlag">
+                <span class="flag-emoji">🌐</span>
+            </div>
+            <div class="text-container">
+                <textarea 
+                    id="sourceText" 
+                    class="translation-textarea" 
+                    placeholder="متن خود را اینجا Paste کنید یا تایپ کنید..."
+                    rows="4"
+                ></textarea>
+                <div class="language-info">
+                    <span id="sourceLanguage" class="language-name">در حال تشخیص...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- آیکون ترجمه در وسط -->
+        <div class="translation-icon-container">
+            <div class="translation-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z" fill="currentColor"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- کادر خروجی ترجمه -->
+        <div class="translation-box output-box">
+            <div class="language-flag" id="targetFlag">
+                <span class="flag-emoji">🇫🇷</span>
+            </div>
+            <div class="text-container">
+                <div id="targetText" class="translation-output">
+                    <span class="placeholder-text">ترجمه اینجا نمایش داده می‌شود...</span>
+                </div>
+                <div class="language-info">
+                    <span id="targetLanguage" class="language-name">فرانسوی</span>
+                    <button id="copyBtn" class="copy-btn" aria-label="کپی کردن">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه ترجمه -->
+        <div class="action-buttons">
+            <button id="translateBtn" class="translate-button">
+                <span>ترجمه</span>
+            </button>
+        </div>
+
+        <!-- نمایش وضعیت -->
+        <div id="statusMessage" class="status-message hidden"></div>
+    </div>
+
+    <!-- اسکریپت‌ها -->
+    <script src="scripts/config.js"></script>
+    <script src="scripts/language-detection.js"></script>
+    <script src="scripts/translation.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/app.js"></script>
+    
+    <!-- ثبت Service Worker برای PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+        
+        // نمایش پیام نصب PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // می‌توانید یک دکمه نصب نمایش دهید
+            console.log('اپلیکیشن آماده نصب است!');
+        });
+    </script>
+</body>
+</html>
+

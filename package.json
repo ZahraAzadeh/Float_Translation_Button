@@ -1,0 +1,33 @@
+{
+  "name": "floating-translation-overlay",
+  "version": "1.0.0",
+  "description": "اپلیکیشن ترجمه شناور برای موبایل و دسکتاپ",
+  "main": "index.html",
+  "scripts": {
+    "serve": "http-server -p 8000 -c-1",
+    "build": "echo 'Build completed'",
+    "cap:init": "npx cap init",
+    "cap:add:android": "npx cap add android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:copy": "npx cap copy",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios",
+    "cordova:build:android": "cordova build android",
+    "cordova:build:ios": "cordova build ios"
+  },
+  "keywords": [
+    "translation",
+    "pwa",
+    "mobile",
+    "floating",
+    "overlay"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {}
+}
+

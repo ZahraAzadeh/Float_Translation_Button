@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد آیکون‌های PWA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        .icon-preview {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 5px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 ایجاد آیکون‌های PWA</h1>
+        
+        <div class="info">
+            <p><strong>راهنمای استفاده:</strong></p>
+            <ol>
+                <li>یک تصویر مربعی (ترجیحاً 512x512) انتخاب کنید</li>
+                <li>روی "ایجاد آیکون‌ها" کلیک کنید</li>
+                <li>آیکون‌های ایجاد شده را دانلود کنید</li>
+                <li>آن‌ها را در پوشه <code>icons/</code> قرار دهید</li>
+            </ol>
+        </div>
+
+        <div>
+            <label for="imageInput">انتخاب تصویر:</label>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button onclick="generateIcons()">ایجاد آیکون‌ها</button>
+            <button onclick="downloadAll()">دانلود همه</button>
+        </div>
+
+        <div id="preview" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        let canvases = {};
+
+        function generateIcons() {
+            const input = document.getElementById('imageInput');
+            const file = input.files[0];
+            
+            if (!file) {
+                alert('لطفاً یک تصویر انتخاب کنید');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const preview = document.getElementById('preview');
+                    preview.innerHTML = '<h2>پیش‌نمایش آیکون‌ها:</h2>';
+                    
+                    sizes.forEach(size => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // رسم تصویر با حفظ نسبت
+                        ctx.drawImage(img, 0, 0, size, size);
+                        
+                        canvases[size] = canvas;
+                        
+                        const div = document.createElement('div');
+                        div.className = 'icon-preview';
+                        div.innerHTML = `
+                            <canvas width="${size}" height="${size}"></canvas>
+                            <p>${size}x${size}</p>
+                            <button onclick="downloadIcon(${size})">دانلود</button>
+                        `;
+                        div.querySelector('canvas').getContext('2d').drawImage(canvas, 0, 0);
+                        preview.appendChild(div);
+                    });
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function downloadIcon(size) {
+            const canvas = canvases[size];
+            if (!canvas) return;
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function downloadAll() {
+            sizes.forEach(size => {
+                setTimeout(() => downloadIcon(size), size * 10);
+            });
+        }
+    </script>
+</body>
+</html>
+

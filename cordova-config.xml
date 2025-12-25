@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.translation.floating" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ترجمه شناور</name>
+    <description>
+        اپلیکیشن ترجمه شناور برای ترجمه سریع متن
+    </description>
+    <author email="your-email@example.com" href="https://example.com">
+        Your Name
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    
+    <!-- Android -->
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon density="ldpi" src="icons/icon-72x72.png" />
+        <icon density="mdpi" src="icons/icon-96x96.png" />
+        <icon density="hdpi" src="icons/icon-128x128.png" />
+        <icon density="xhdpi" src="icons/icon-144x144.png" />
+        <icon density="xxhdpi" src="icons/icon-192x192.png" />
+        <icon density="xxxhdpi" src="icons/icon-384x384.png" />
+    </platform>
+    
+    <!-- iOS -->
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <icon src="icons/icon-152x152.png" width="152" height="152" />
+        <icon src="icons/icon-192x192.png" width="192" height="192" />
+    </platform>
+    
+    <!-- Splash Screen -->
+    <splash src="icons/icon-512x512.png" />
+    
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="21" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+</widget>
+

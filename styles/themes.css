@@ -1,0 +1,50 @@
+/* تم تاریک (پیش‌فرض) */
+body.dark-theme {
+    background: #1e1e1e;
+    color: #ffffff;
+}
+
+/* تم روشن */
+body.light-theme {
+    background: #f5f5f5;
+    color: #333333;
+}
+
+body.light-theme .translation-panel {
+    background: #ffffff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .translation-textarea,
+body.light-theme .translation-output {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #333333;
+}
+
+body.light-theme .translation-textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+body.light-theme .icon-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #333333;
+}
+
+body.light-theme .icon-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .language-info {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+body.light-theme .copy-btn {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333333;
+}
+
+body.light-theme .copy-btn:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+
